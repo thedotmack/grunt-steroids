@@ -1,0 +1,43 @@
+{
+  "name": "grunt-steroids-defaults",
+  "description": "Steroids CLI default Grunt tasks.",
+  "version": "0.1.0",
+  "homepage": "http://www.appgyver.com",
+  "author": {
+    "name": "Harri Sarsa",
+    "email": "harri.sarsa@appgyver.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/AppGyver/grunt-steroids-defaults.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AppGyver/grunt-steroids-defaults/issues"
+  },
+  "licenses": {
+    "type": "MIT"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.1"
+  },
+  "dependencies": {
+    "wrench": "~1.5.4",
+    "chalk": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
