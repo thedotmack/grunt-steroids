@@ -4,6 +4,38 @@ fs = require "fs"
 wrench = require "wrench"
 
 module.exports = (grunt)->
+
+  grunt.loadNpmTasks 'grunt-contrib-clean'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
+
+  grunt.initConfig
+    clean:
+      dist:
+        ["dist/"]
+
+    copy:
+      controllers:
+        expand: true
+        cwd: 'app/controllers'
+        src: ['**/*.js', '**/*.coffee']
+        dest: 'dist/controllers/'
+      models:
+        expand:true
+        cwd: 'app/models/'
+        src: ['**/*.js', '**/*.coffee']
+        dest: 'dist/models/'
+      statics:
+        src: 'www/*'
+        dest: 'dist/'
+
+    concat:
+      models:
+        src: ['dist/models/jes.js', 'dist/models/kaks.js']#'**/*.js'
+        dist: 'dist/models/models.js'
+        separator: '/n/n'
+
+
   grunt.registerTask 'steroids-make', "Create the dist/ folder that is copied to the device.", [
     'steroids-clean-dist',
     'steroids-build-controllers',
@@ -18,58 +50,26 @@ module.exports = (grunt)->
   # CLEAN TASKS
 
   grunt.registerTask 'steroids-clean-dist', 'Removes dist/ recursively and creates it again ', ->
-    wrench.rmdirSyncRecursive "dist/", true
+    grunt.task.run 'clean:dist'
     grunt.file.mkdir "dist/"
 
   # -------------------------------------------
   # BUILD TASKS
 
-  copyFilesSyncRecursive = (options)->
-    grunt.verbose.writeln "Copying files from #{options.sourcePath} to #{options.destinationDir} using #{options.relativeDir} as basedir"
-
-    for filePath in grunt.file.expand options.sourcePath when fs.statSync(filePath).isFile()
-
-      relativePath = path.relative options.relativeDir, filePath
-      destinationPath = path.join options.destinationDir, relativePath
-
-      grunt.verbose.writeln "Copying file #{filePath} to #{destinationPath}"
-
-      grunt.file.copy filePath, destinationPath
-
   grunt.registerTask 'steroids-build-controllers', "Build controllers", ->
-    copyFilesSyncRecursive {
-      sourcePath: "app/controllers"
-      destinationDir: "dist/"
-      relativeDir: "."
-    }
+    grunt.task.run 'copy:controllers'
 
   grunt.registerTask 'steroids-build-models', "Build models", ->
-    copyFilesSyncRecursive {
-      sourcePath: "app/models"
-      destinationDir: "dist/models"
-      relativeDir: "."
-    }
+    grunt.task.run 'copy:models'
 
   grunt.registerTask 'steroids-build-statics', "Build static files", ->
-    copyFilesSyncRecursive {
-      sourcePath: Paths.application.sources.statics
-      destinationDir: Paths.application.distDir
-      relativeDir: Paths.application.sources.staticDir
-    }
+    grunt.task.run 'copy:statics'
 
   # -------------------------------------------
   # COMPILE TASKS
 
   grunt.registerTask 'steroids-compile-models', "Compile models", ->
-    javascripts = []
-    sourceFiles = grunt.file.expand Paths.application.compiles.models
-
-    for filePath in sourceFiles when fs.statSync(filePath).isFile()
-      grunt.verbose.writeln "Compiling model file at #{filePath}"
-      javascripts.push grunt.file.read(filePath, "utf8").toString()
-      fs.unlinkSync filePath
-
-    grunt.file.write Paths.application.compileProducts.models, javascripts.join("\n\n")
+    grunt.task.run 'concat:models'
 
   grunt.registerTask 'steroids-compile-views', "Compile views", ->
 
