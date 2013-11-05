@@ -2,6 +2,7 @@ chalk = require "chalk"
 
 fs = require "fs"
 wrench = require "wrench"
+path = require "path"
 
 module.exports = (grunt)->
 
@@ -10,94 +11,63 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-concat'
 
   grunt.initConfig
+
     clean:
+      # Clean dist/ folder (delete and create again)
       dist:
         ["dist/"]
 
     copy:
+      # Copy controllers from app/controllers to dist/controllers
       controllers:
         expand: true
         cwd: 'app/controllers'
         src: ['**/*.js', '**/*.coffee']
         dest: 'dist/controllers/'
+      # Copy models from app/models to dist/models
       models:
         expand:true
         cwd: 'app/models/'
         src: ['**/*.js', '**/*.coffee']
         dest: 'dist/models/'
+      # Copy contents of www/ directory to dist/
       statics:
         src: 'www/*'
         dest: 'dist/'
 
     concat:
+      # Concatenate all model files into one
       models:
-        src: ['dist/models/jes.js', 'dist/models/kaks.js']#'**/*.js'
-        dist: 'dist/models/models.js'
-        separator: '/n/n'
-
+        src: 'app/models/*.js'
+        dest: 'dist/models/models.js'
 
   grunt.registerTask 'steroids-make', "Create the dist/ folder that is copied to the device.", [
-    'steroids-clean-dist',
-    'steroids-build-controllers',
-    'steroids-build-models',
-    'steroids-build-statics',
-    'steroids-compile-models',
-    'steroids-compile-views',
+    'clean:dist'
+    'copy:controllers'
+    'copy:models'
+    'copy:statics'
+    'concat:models'
+    'steroids-compile-views'
     'steroids-cordova-merges'
   ]
 
-  # -------------------------------------------
-  # CLEAN TASKS
-
-  grunt.registerTask 'steroids-clean-dist', 'Removes dist/ recursively and creates it again ', ->
-    grunt.task.run 'clean:dist'
-    grunt.file.mkdir "dist/"
-
-  # -------------------------------------------
-  # BUILD TASKS
-
-  grunt.registerTask 'steroids-build-controllers', "Build controllers", ->
-    grunt.task.run 'copy:controllers'
-
-  grunt.registerTask 'steroids-build-models', "Build models", ->
-    grunt.task.run 'copy:models'
-
-  grunt.registerTask 'steroids-build-statics', "Build static files", ->
-    grunt.task.run 'copy:statics'
-
-  # -------------------------------------------
-  # COMPILE TASKS
-
-  grunt.registerTask 'steroids-compile-models', "Compile models", ->
-    grunt.task.run 'concat:models'
 
   grunt.registerTask 'steroids-compile-views', "Compile views", ->
 
-    projectDirectory          = Paths.applicationDir
+    buildDirectory            = "dist"
+    buildControllersDirectory = path.join "dist", "controllers"
 
-    buildDirectory            = path.join projectDirectory, "dist"
-    buildViewsDirectory       = path.join buildDirectory, "views"
-    buildModelsDirectory      = path.join buildDirectory, "models"
-    buildcontrollersDirectory = path.join buildDirectory, "controllers"
-    buildStylesheetsDirectory = path.join buildDirectory, "stylesheets"
+    appLayoutsDirectory       = path.join "app", "views", "layouts"
 
-    appDirectory              = path.join projectDirectory, "app"
-    appViewsDirectory         = path.join appDirectory, "views"
-    appModelsDirectory        = path.join appDirectory, "models"
-    appControllersDirectory   = path.join appDirectory, "controllers"
-    appLayoutsDirectory       = path.join appDirectory, "views", "layouts"
-
-    vendorDirectory           = path.join projectDirectory, "vendor"
-    wwwDirectory              = path.join projectDirectory, "www"
+    wwwDirectory              = "www"
 
     viewDirectories = []
 
     # get each view folder (except layout)
-    for dirPath in grunt.file.expand(path.join(appViewsDirectory, "*")) when fs.statSync(dirPath).isDirectory()
+    for dirPath in grunt.file.expand "app/views/*" when fs.statSync(dirPath).isDirectory()
       basePath = path.basename(dirPath)
       unless basePath is "layouts" + path.sep or basePath is "layouts"
         viewDirectories.push dirPath
-        grunt.file.mkdir path.join(buildViewsDirectory, path.basename(dirPath))
 
 
     for viewDir in viewDirectories
@@ -114,6 +84,7 @@ module.exports = (grunt)->
 
       layoutFilePath = path.join appLayoutsDirectory, layoutFileName
 
+      # If no resource-specific layout is found, use application.html
       unless fs.existsSync(layoutFilePath)
         layoutFilePath = path.join appLayoutsDirectory, "application.html"
 
@@ -135,7 +106,7 @@ module.exports = (grunt)->
         else
 
           controllerName = path.basename(viewDir).replace(path.sep, "")
-          controllerBasenameWithPath = path.join(buildcontrollersDirectory, "#{controllerName}")
+          controllerBasenameWithPath = path.join(buildControllersDirectory, "#{controllerName}")
 
 
 
@@ -153,15 +124,19 @@ module.exports = (grunt)->
           )({ yield: yieldObj })
 
         # write the file
+        grunt.log.write "Creating file #{buildFilePath}..."
         grunt.file.mkdir path.dirname(buildFilePath)
         grunt.file.write buildFilePath, yieldedFile
+        grunt.log.writeln "#{chalk.green('OK')}"
 
-  grunt.registerTask 'steroids-cordova-merges', "Handle cordova merges", ->
 
-    projectDirectory  = Paths.applicationDir
-    distDirectory     = Paths.application.distDir
+  grunt.registerTask 'steroids-cordova-merges', "Handle Cordova merges", ->
 
-    mergesDirectory         = path.join projectDirectory, "merges"
+    grunt.log.write("Moving platform-specific files from the merges/ directory to dist/...")
+
+    distDirectory           = "dist"
+
+    mergesDirectory         = "merges"
     androidMergesDirectory  = path.join mergesDirectory, "android"
     iosMergesDirectory      = path.join mergesDirectory, "ios"
 
@@ -201,3 +176,5 @@ module.exports = (grunt)->
           grunt.log.writeln "#{chalk.red('Overwriting:')} dist#{filePathInDist.replace(distDirectory, '')}"
 
         fs.writeFileSync filePathInDist, fs.readFileSync(filePath)
+
+    grunt.log.writeln "#{chalk.green('OK')}"
