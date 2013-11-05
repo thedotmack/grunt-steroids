@@ -9,6 +9,7 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
 
   grunt.initConfig
 
@@ -18,22 +19,33 @@ module.exports = (grunt)->
         ["dist/"]
 
     copy:
-      # Copy controllers from app/controllers to dist/controllers
-      controllers:
+      # Copy JavaScript files from app/ to dist/
+      js_from_app:
         expand: true
-        cwd: 'app/controllers'
-        src: ['**/*.js', '**/*.coffee']
-        dest: 'dist/controllers/'
-      # Copy models from app/models to dist/models
-      models:
-        expand:true
-        cwd: 'app/models/'
-        src: ['**/*.js', '**/*.coffee']
-        dest: 'dist/models/'
-      # Copy contents of www/ directory to dist/
-      statics:
-        src: 'www/*'
+        cwd: 'app/'
+        src: ['**/*.js']
         dest: 'dist/'
+      # Copy contents of www/ directory to dist/, except .coffee files
+      www:
+        expand:true
+        cwd: 'www/'
+        src: ['**/*.*', '!**/*.coffee']
+        dest: 'dist/'
+
+    coffee:
+      # Compile and move all .coffee files in www and app dist/
+      compile_app:
+        expand: true
+        cwd: 'app/'
+        src: ['**/*.coffee']
+        dest: 'dist/'
+        ext: '.js'
+      compile_www:
+        expand: true
+        cwd: 'www/'
+        src: ['**/*.coffee']
+        dest: 'dist/'
+        ext: '.js'
 
     concat:
       # Concatenate all model files into one
@@ -43,9 +55,10 @@ module.exports = (grunt)->
 
   grunt.registerTask 'steroids-make', "Create the dist/ folder that is copied to the device.", [
     'clean:dist'
-    'copy:controllers'
-    'copy:models'
-    'copy:statics'
+    'copy:js_from_app'
+    'copy:www'
+    'coffee:compile_app'
+    'coffee:compile_www'
     'concat:models'
     'steroids-compile-views'
     'steroids-cordova-merges'
