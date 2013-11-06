@@ -26,6 +26,14 @@ exports.steroids_make = {
   setUp: function(done) {
     // setup here if necessary
     done();
+  },
+  // create dist folder
+  create_dist: function(test) {
+    test.expect(1);
+
+    var distFolderExists = grunt.file.isDir('tmp/dist/')
+    var expected = true;
+
+    test.ok(distDirExists, "dist/ folder exists!")
   }
-  // TODO WRITE TESTS
 };

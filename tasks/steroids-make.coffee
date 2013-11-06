@@ -25,15 +25,16 @@ module.exports = (grunt)->
         cwd: 'app/'
         src: ['**/*.js']
         dest: 'dist/'
-      # Copy contents of www/ directory to dist/, except .coffee files
+      # Copy contents of www/ directory to dist/, except .coffee and .scss files
+      # (they are handled by separate Grunt tasks, configured below)
       www:
         expand:true
         cwd: 'www/'
-        src: ['**/*.*', '!**/*.coffee']
+        src: ['**/*.*', '!**/*.coffee', '!**/*.scss']
         dest: 'dist/'
 
     coffee:
-      # Compile and move all .coffee files in www and app dist/
+      # Compile and move all .coffee files in www and app to dist/
       compile_app:
         expand: true
         cwd: 'app/'
