@@ -22,6 +22,8 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+// TODO: write tests that function :)
+
 exports.steroids_make = {
   setUp: function(done) {
     // setup here if necessary

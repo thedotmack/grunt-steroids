@@ -10,7 +10,6 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-sass'
 
   grunt.initConfig
 
@@ -55,25 +54,6 @@ module.exports = (grunt)->
         src: 'app/models/*.js'
         dest: 'dist/models/models.js'
 
-    sass:
-      dist:
-        files: [
-          {
-            expand: true
-            cwd: 'app/'
-            src: ['**/*.scss', '**/*.sass']
-            dest: 'dist/'
-            ext: '.css'
-          }
-          {
-            expand: true
-            cwd: 'www/'
-            src: ['**/*.scss', '**/*.sass']
-            dest: 'dist/'
-            ext: '.css'
-          }
-        ]
-
   grunt.registerTask 'steroids-make', "Create the dist/ folder that is copied to the device.", [
     'clean:dist'
     'copy:js_from_app'
@@ -84,19 +64,6 @@ module.exports = (grunt)->
     'steroids-compile-views'
     'steroids-cordova-merges'
   ]
-
-  grunt.registerTask 'steroids-compile-sass', "Compile SASS files if they exist", ->
-
-    sassFiles = grunt.file.expand(["www/**/*.scss", "www/**/*.sass", "app/**/*.scss", "app/**/*.sass"])
-
-    if sassFiles.length > 0
-      grunt.log.writeln("SASS files found, attempting to compile them to dist/...")
-      grunt.task.run("sass:dist")
-
-    else
-      grunt.log.writeln("No .scss or .sass files found in app/ or www/, skipping SASS compile.")
-
-
 
   grunt.registerTask 'steroids-compile-views', "Compile views", ->
 
