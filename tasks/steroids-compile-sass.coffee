@@ -1,9 +1,3 @@
-chalk = require "chalk"
-
-fs = require "fs"
-wrench = require "wrench"
-path = require "path"
-
 module.exports = (grunt)->
 
   grunt.loadNpmTasks 'grunt-contrib-sass'
