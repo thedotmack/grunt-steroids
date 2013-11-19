@@ -1,8 +1,7 @@
 /*
- * grunt-steroids-defaults
+ * grunt-steroids
  * http://www.appgyver.com
  *
- * Copyright (c) 2013 Harri Sarsa
  * Licensed under the MIT license.
  */
 
