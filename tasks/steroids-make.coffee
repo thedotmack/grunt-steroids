@@ -10,8 +10,9 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-extend-config'
 
-  grunt.initConfig
+  grunt.extendConfig
 
     clean:
       # Clean dist/ folder (delete and create again)

@@ -1,8 +1,9 @@
 module.exports = (grunt)->
 
   grunt.loadNpmTasks 'grunt-contrib-sass'
+  grunt.loadNpmTasks 'grunt-extend-config'
 
-  grunt.initConfig
+  grunt.extendConfig
 
     sass:
       dist:
