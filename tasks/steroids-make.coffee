@@ -6,67 +6,92 @@ path = require "path"
 
 module.exports = (grunt)->
 
-  grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-copy'
-  grunt.loadNpmTasks 'grunt-contrib-concat'
-  grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-extend-config'
+  grunt.loadNpmTasks "grunt-contrib-clean"
+  grunt.loadNpmTasks "grunt-contrib-copy"
+  grunt.loadNpmTasks "grunt-contrib-concat"
+  grunt.loadNpmTasks "grunt-contrib-coffee"
+  grunt.loadNpmTasks "grunt-extend-config"
 
-  grunt.extendConfig
 
-    clean:
-      # Clean dist/ folder (delete and create again)
-      dist:
-        ["dist/"]
-
-    copy:
-      # Copy JavaScript files from app/ to dist/
-      js_from_app:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.js']
-        dest: 'dist/'
-      # Copy contents of www/ directory to dist/, except .coffee and .scss files
-      # (they are handled by separate Grunt tasks, configured below)
-      www:
-        expand:true
-        cwd: 'www/'
-        src: ['**/*.*', '!**/*.coffee', '!**/*.scss']
-        dest: 'dist/'
-
-    coffee:
-      # Compile and move all .coffee files in www and app to dist/
-      compile_app:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.coffee']
-        dest: 'dist/'
-        ext: '.js'
-      compile_www:
-        expand: true
-        cwd: 'www/'
-        src: ['**/*.coffee']
-        dest: 'dist/'
-        ext: '.js'
-
-    concat:
-      # Concatenate all model files into one
-      models:
-        src: 'app/models/*.js'
-        dest: 'dist/models/models.js'
-
-  grunt.registerTask 'steroids-make', "Create the dist/ folder that is copied to the device.", [
-    'clean:dist'
-    'copy:js_from_app'
-    'copy:www'
-    'coffee:compile_app'
-    'coffee:compile_www'
-    'concat:models'
-    'steroids-compile-views'
-    'steroids-cordova-merges'
+  grunt.registerTask "steroids-make", "Create the dist/ folder that is copied to the device.", [
+    "steroids-clean-dist"
+    "steroids-copy-js-from-app"
+    "steroids-copy-www"
+    "steroids-compile-coffee"
+    "steroids-concat-models"
+    "steroids-compile-views"
+    "steroids-cordova-merges"
   ]
 
-  grunt.registerTask 'steroids-compile-views', "Compile views", ->
+  grunt.registerTask "steroids-clean-dist", "Clean dist/", ->
+
+    grunt.extendConfig
+      clean:
+        # Clean dist/ folder (delete and create again)
+        dist:
+          ["dist/"]
+
+    grunt.task.run "clean:dist"
+
+
+  grunt.registerTask "steroids-copy-js-from-app", "Copy JavaScript files from app/ to dist/", ->
+
+    grunt.extendConfig
+      copy:
+        js_from_app:
+          expand: true
+          cwd: "app/"
+          src: ["**/*.js"]
+          dest: "dist/"
+
+    grunt.task.run "copy:js_from_app"
+
+
+  grunt.registerTask "steroids-copy-www", "Copy files from www/ to dist/ (except for .scss and .coffee)", ->
+
+    grunt.extendConfig
+      copy:
+        www:
+          expand:true
+          cwd: 'www/'
+          src: ['**/*.*', '!**/*.coffee', '!**/*.scss']
+          dest: 'dist/'
+
+    grunt.task.run "copy:www"
+
+
+  grunt.registerTask "steroids-compile-coffee", "Compile CoffeeScript files from app/ and www/ to dist/", ->
+
+    grunt.extendConfig
+      coffee:
+        compile_app:
+          expand: true
+          cwd: "app/"
+          src: ["**/*.coffee"]
+          dest: "dist/"
+          ext: ".js"
+        compile_www:
+          expand: true
+          cwd: "www/"
+          src: ["**/*.coffee"]
+          dest: "dist/"
+          ext: ".js"
+
+    grunt.task.run "coffee:compile_app"
+    grunt.task.run "coffee:compile_www"
+
+  grunt.registerTask "steroids-concat-models", "Concatenate all JS files in app/model/ into dist/models/models.js", ->
+
+    grunt.extendConfig
+      concat:
+        models:
+          src: 'app/models/*.js'
+          dest: 'dist/models/models.js'
+
+    grunt.task.run "concat:models"
+
+
+  grunt.registerTask "steroids-compile-views", "Compile views", ->
 
     buildDirectory            = "dist"
     buildControllersDirectory = path.join "dist", "controllers"
@@ -125,7 +150,7 @@ module.exports = (grunt)->
 
 
           unless fs.existsSync "#{controllerBasenameWithPath}.js"
-            warningMessage = "#{chalk.red('Warning:')} There is no controller for resource '#{controllerName}'.  Add file app/controllers/#{controllerName}.{js|coffee}"
+            warningMessage = "#{chalk.red("Warning:")} There is no controller for resource "#{controllerName}".  Add file app/controllers/#{controllerName}.{js|coffee}"
             grunt.log.writeln warningMessage
 
           yieldObj =
@@ -141,10 +166,10 @@ module.exports = (grunt)->
         grunt.log.write "Creating file #{buildFilePath}..."
         grunt.file.mkdir path.dirname(buildFilePath)
         grunt.file.write buildFilePath, yieldedFile
-        grunt.log.writeln "#{chalk.green('OK')}"
+        grunt.log.writeln "#{chalk.green("OK")}"
 
 
-  grunt.registerTask 'steroids-cordova-merges', "Handle Cordova merges", ->
+  grunt.registerTask "steroids-cordova-merges", "Handle Cordova merges", ->
 
     grunt.log.write("Moving platform-specific files from the merges/ directory to dist/...")
 
@@ -169,10 +194,10 @@ module.exports = (grunt)->
         filePathInDist = filePath.replace(androidMergesDirectory, distDirectory)
         filePathInDistWithAndroidExtensionPrefix = filePathInDist.replace(origFileName, androidFileName)
 
-        grunt.log.writeln "#{filePath.replace(androidMergesDirectory+'/', '')} -> dist#{filePathInDistWithAndroidExtensionPrefix.replace(distDirectory, '')}"
+        grunt.log.writeln "#{filePath.replace(androidMergesDirectory+"/", "")} -> dist#{filePathInDistWithAndroidExtensionPrefix.replace(distDirectory, "")}"
 
         if fs.existsSync filePathInDistWithAndroidExtensionPrefix
-          grunt.log.writeln "#{chalk.red('Overwriting:')} dist#{filePathInDistWithAndroidExtensionPrefix.replace(distDirectory, '')}"
+          grunt.log.writeln "#{chalk.red("Overwriting:")} dist#{filePathInDistWithAndroidExtensionPrefix.replace(distDirectory, "")}"
 
         fs.writeFileSync filePathInDistWithAndroidExtensionPrefix, fs.readFileSync(filePath)
 
@@ -184,11 +209,11 @@ module.exports = (grunt)->
         # setup proper paths for file copy
         filePathInDist = filePath.replace(iosMergesDirectory, distDirectory)
 
-        grunt.log.writeln "#{filePath.replace(iosMergesDirectory+'/', '')} -> dist#{filePathInDist.replace(distDirectory, '')}"
+        grunt.log.writeln "#{filePath.replace(iosMergesDirectory+"/", "")} -> dist#{filePathInDist.replace(distDirectory, "")}"
 
         if fs.existsSync filePathInDist
-          grunt.log.writeln "#{chalk.red('Overwriting:')} dist#{filePathInDist.replace(distDirectory, '')}"
+          grunt.log.writeln "#{chalk.red("Overwriting:")} dist#{filePathInDist.replace(distDirectory, "")}"
 
         fs.writeFileSync filePathInDist, fs.readFileSync(filePath)
 
-    grunt.log.writeln "#{chalk.green('OK')}"
+    grunt.log.writeln "#{chalk.green("OK")}"

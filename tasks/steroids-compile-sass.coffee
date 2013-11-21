@@ -3,28 +3,27 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-extend-config'
 
-  grunt.extendConfig
-
-    sass:
-      dist:
-        files: [
-          {
-            expand: true
-            cwd: 'app/'
-            src: ['**/*.scss', '**/*.sass']
-            dest: 'dist/'
-            ext: '.css'
-          }
-          {
-            expand: true
-            cwd: 'www/'
-            src: ['**/*.scss', '**/*.sass']
-            dest: 'dist/'
-            ext: '.css'
-          }
-        ]
-
   grunt.registerTask 'steroids-compile-sass', "Compile SASS files if they exist", ->
+
+    grunt.extendConfig
+      sass:
+        dist:
+          files: [
+            {
+              expand: true
+              cwd: 'app/'
+              src: ['**/*.scss', '**/*.sass']
+              dest: 'dist/'
+              ext: '.css'
+            }
+            {
+              expand: true
+              cwd: 'www/'
+              src: ['**/*.scss', '**/*.sass']
+              dest: 'dist/'
+              ext: '.css'
+            }
+          ]
 
     sassFiles = grunt.file.expand(["www/**/*.scss", "www/**/*.sass", "app/**/*.scss", "app/**/*.sass"])
 
