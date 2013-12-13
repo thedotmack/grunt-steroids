@@ -80,12 +80,12 @@ module.exports = (grunt)->
     grunt.task.run "coffee:compile_app"
     grunt.task.run "coffee:compile_www"
 
-  grunt.registerTask "steroids-concat-models", "Concatenate all JS files in app/model/ into dist/models/models.js", ->
+  grunt.registerTask "steroids-concat-models", "Concatenate all JS files in dist/model/ into dist/models/models.js", ->
 
     grunt.extendConfig
       concat:
         models:
-          src: 'app/models/*.js'
+          src: 'dist/models/*.js'
           dest: 'dist/models/models.js'
 
     grunt.task.run "concat:models"
