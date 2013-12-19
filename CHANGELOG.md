@@ -1,3 +1,7 @@
+#0.1.2 (2013-12-19)
+
+Updated absolute version numbers for dependencies to latest.
+
 #0.1.1 (2013-12-13)
 
 Fixed `steroids-concat-models` task using `dist/models/` as source instead of `app/models/`. This fixes concatenation of `.coffee` model files into `models.js`.
