@@ -3,10 +3,17 @@
   "description": "Grunt tasks for AppGyver Steroids.",
   "version": "0.1.1",
   "homepage": "http://www.appgyver.com",
-  "author": {
-    "name": "Harri Sarsa",
-    "email": "harri.sarsa@appgyver.com"
-  },
+  "author": "AppGyver <contact@appgyver.com>",
+  "contributors": [
+    {
+      "name": "Harri Sarsa",
+      "email": "harri.sarsa@appgyver.com"
+    },
+    {
+      "name": "Eevert Saukkokoski",
+      "email": "eevert.saukkokoski@appgyver.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/AppGyver/grunt-steroids.git"
