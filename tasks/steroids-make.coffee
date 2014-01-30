@@ -1,9 +1,10 @@
 chalk = require "chalk"
 wrench = require "wrench"
-xml2js = require "xml2js"
 
 fs = require "fs"
 path = require "path"
+
+SteroidsConfigure = require '../lib/SteroidsConfigure'
 
 module.exports = (grunt)->
 
@@ -22,6 +23,7 @@ module.exports = (grunt)->
     "steroids-concat-models"
     "steroids-compile-views"
     "steroids-cordova-merges"
+    "steroids-configure"
   ]
 
   grunt.registerTask "steroids-clean-dist", "Clean dist/", ->
@@ -220,12 +222,11 @@ module.exports = (grunt)->
     grunt.log.writeln "#{chalk.green("OK")}"
 
   grunt.registerTask "steroids-configure", "Read XML configuration files from www/ and output a JSON to dist/", ->
-
-    configXml = grunt.file.read "www/config.xml"
     done = @async()
 
-    xml2js.parseString configXml, (err, result) ->
+    configXml = grunt.file.read "www/config.xml"
+    SteroidsConfigure.fromXml configXml, (err, json) ->
       throw new Error err if err?
-      outputJson = JSON.stringify(result, null, 2)
-      grunt.file.write "dist/config.json", outputJson
+      grunt.file.write "dist/config.json", json
+      
       done()
