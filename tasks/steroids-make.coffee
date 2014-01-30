@@ -222,4 +222,10 @@ module.exports = (grunt)->
   grunt.registerTask "steroids-configure", "Read XML configuration files from www/ and output a JSON to dist/", ->
 
     configXml = grunt.file.read "www/config.xml"
-    grunt.file.write "dist/config.json", configXml
+    done = @async()
+
+    xml2js.parseString configXml, (err, result) ->
+      throw new Error err if err?
+      outputJson = JSON.stringify(result, null, 2)
+      grunt.file.write "dist/config.json", outputJson
+      done()
