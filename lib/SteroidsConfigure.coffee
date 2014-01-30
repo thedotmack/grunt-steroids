@@ -26,10 +26,14 @@ pickParams = (feature) ->
 
 module.exports = 
   fromXml: (xmlString, done) ->
-    xml2js.parseString xmlString, (err, rawXmlConfig) ->
-      return done err if err?
+    xml2js.parseString(
+      xmlString
+      { explicitRoot: false }
+      (err, rawXmlConfig) ->
+        return done err if err?
 
-      friendlyConfig = makeFriendlier rawXmlConfig
+        friendlyConfig = makeFriendlier rawXmlConfig
 
-      result = JSON.stringify(friendlyConfig, null, 2)
-      done null, result
+        result = JSON.stringify(friendlyConfig, null, 2)
+        done null, result
+    )
