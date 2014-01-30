@@ -7,21 +7,19 @@ makeFriendlier = (config) ->
     features: pickFeatures config
   }
 
-pickFeatures = (config) ->
-  _(config.feature || [])
+indexedByName = (elements) ->
+  _(elements || [])
     .chain()
-    .filter((feature) -> feature.$?.name?)
-    .indexBy((feature) -> feature.$.name)
-    .mapValues((feature) ->
-      pickParams feature
-    ).value()
+    .filter((element) -> element.$?.name?)
+    .indexBy((element) -> element.$.name)
 
-pickParams = (feature) ->
-  _(feature.param || [])
-    .chain()
-    .filter((param) -> param.$?.name?)
-    .indexBy((param) -> param.$.name)
-    .mapValues((param) -> param.$.value)
+pickFeatures = (config) ->
+  indexedByName(config.feature)
+    .mapValues((feature) ->
+      indexedByName(feature.param)
+        .mapValues((param) -> param.$.value)
+        .value()
+    )
     .value()
 
 module.exports = 
