@@ -1,7 +1,8 @@
 chalk = require "chalk"
+wrench = require "wrench"
+xml2js = require "xml2js"
 
 fs = require "fs"
-wrench = require "wrench"
 path = require "path"
 
 module.exports = (grunt)->
@@ -217,3 +218,8 @@ module.exports = (grunt)->
         fs.writeFileSync filePathInDist, fs.readFileSync(filePath)
 
     grunt.log.writeln "#{chalk.green("OK")}"
+
+  grunt.registerTask "steroids-configure", "Read XML configuration files from www/ and output a JSON to dist/", ->
+
+    configXml = grunt.file.read "www/config.xml"
+    grunt.file.write "dist/config.json", configXml
