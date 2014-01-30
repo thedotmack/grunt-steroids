@@ -1,28 +1,28 @@
 
 xml2js = require "xml2js"
+_ = require "lodash"
 
 makeFriendlier = (config) ->
-  result = {}
+  {
+    features: pickFeatures config
+  }
 
-  result.features = pickFeatures config.widget?.feature || []
+pickFeatures = (config) ->
+  _(config.feature || [])
+    .chain()
+    .filter((feature) -> feature.$?.name?)
+    .indexBy((feature) -> feature.$.name)
+    .mapValues((feature) ->
+      pickParams feature
+    ).value()
 
-  result
-
-pickFeatures = (features) ->
-  result = {}
-
-  for feature in features when feature.$?.name?
-    result[feature.$.name] = pickParams feature.param || []
-
-  result
-
-pickParams = (params) ->
-  result = {}
-
-  for param in params when param.$?.name? and param.$?.value?
-    result[param.$.name] = param.$.value
-
-  result
+pickParams = (feature) ->
+  _(feature.param || [])
+    .chain()
+    .filter((param) -> param.$?.name?)
+    .indexBy((param) -> param.$.name)
+    .mapValues((param) -> param.$.value)
+    .value()
 
 module.exports = 
   fromXml: (xmlString, done) ->
