@@ -1,3 +1,7 @@
+#0.1.3 (TODO)
+
+Added `steroids-configure` Grunt task to `steroids-make` defaults, used to parse [Steroids Addons](http://www.appgyver.com/steroids/addons) feature configurations from `www/config.xml`.
+
 #0.1.2 (2013-12-19)
 
 Updated absolute version numbers for dependencies to latest.
