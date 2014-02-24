@@ -26,19 +26,6 @@ module.exports = (grunt)->
     "steroids-configure"
   ]
 
-  grunt.registerTask "steroids-copy-www", "Copy files from www/ to dist/ (except for .scss and .coffee)", ->
-
-    grunt.extendConfig
-      copy:
-        www:
-          expand:true
-          cwd: 'www/'
-          src: ['**/*.*', '!**/*.coffee', '!**/*.scss']
-          dest: 'dist/'
-
-    grunt.task.run "copy:www"
-
-
   grunt.registerTask "steroids-compile-coffee", "Compile CoffeeScript files from app/ and www/ to dist/", ->
 
     grunt.extendConfig
