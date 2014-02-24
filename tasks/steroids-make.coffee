@@ -26,17 +26,6 @@ module.exports = (grunt)->
     "steroids-configure"
   ]
 
-  grunt.registerTask "steroids-clean-dist", "Clean dist/", ->
-
-    grunt.extendConfig
-      clean:
-        # Clean dist/ folder (delete and create again)
-        dist:
-          ["dist/"]
-
-    grunt.task.run "clean:dist"
-
-
   grunt.registerTask "steroids-copy-js-from-app", "Copy JavaScript files from app/ to dist/", ->
 
     grunt.extendConfig
