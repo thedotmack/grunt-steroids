@@ -32,4 +32,4 @@ module.exports = (grunt)->
       grunt.task.run("sass:dist")
 
     else
-      grunt.log.writeln("No .scss or .sass files found in app/ or www/, skipping SASS compile.")
+      grunt.log.writeln("No .scss or .sass files found in app/ or www/, skipping.")
