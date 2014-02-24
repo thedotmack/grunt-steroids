@@ -20,6 +20,10 @@ valuesByName = (elements, value) ->
     .mapValues((element) -> value element)
     .value()
 
+INDENT_SPACES = 2
+stringifyWithIndentation = (object) ->
+  JSON.stringify(object, null, INDENT_SPACES)
+
 module.exports = 
   fromXml: (xmlString, done) ->
     xml2js.parseString(
@@ -29,7 +33,7 @@ module.exports =
         return done err if err?
 
         friendlyConfig = makeFriendlier rawXmlConfig
-
-        result = JSON.stringify(friendlyConfig, null, 2)
+        result = stringifyWithIndentation friendlyConfig
+        
         done null, result
     )
