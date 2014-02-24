@@ -1,4 +1,8 @@
-#0.1.3 (TODO)
+#0.2.1 (TODO)
+
+`steroids-configure` task now gives a proper error message if `www/config.xml` is missing.
+
+#0.2.0 (2014-02-17)
 
 Added `steroids-configure` Grunt task to `steroids-make` defaults, used to parse [Steroids Addons](http://www.appgyver.com/steroids/addons) feature configurations from `www/config.xml`.
 
