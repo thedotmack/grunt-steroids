@@ -26,26 +26,6 @@ module.exports = (grunt)->
     "steroids-configure"
   ]
 
-  grunt.registerTask "steroids-compile-coffee", "Compile CoffeeScript files from app/ and www/ to dist/", ->
-
-    grunt.extendConfig
-      coffee:
-        compile_app:
-          expand: true
-          cwd: "app/"
-          src: ["**/*.coffee"]
-          dest: "dist/"
-          ext: ".js"
-        compile_www:
-          expand: true
-          cwd: "www/"
-          src: ["**/*.coffee"]
-          dest: "dist/"
-          ext: ".js"
-
-    grunt.task.run "coffee:compile_app"
-    grunt.task.run "coffee:compile_www"
-
   grunt.registerTask "steroids-concat-models", "Concatenate all JS files in dist/model/ into dist/models/models.js", ->
 
     grunt.extendConfig
