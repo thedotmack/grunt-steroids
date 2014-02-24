@@ -26,17 +26,6 @@ module.exports = (grunt)->
     "steroids-configure"
   ]
 
-  grunt.registerTask "steroids-concat-models", "Concatenate all JS files in dist/model/ into dist/models/models.js", ->
-
-    grunt.extendConfig
-      concat:
-        models:
-          src: 'dist/models/*.js'
-          dest: 'dist/models/models.js'
-
-    grunt.task.run "concat:models"
-
-
   grunt.registerTask "steroids-compile-views", "Compile views", ->
 
     buildDirectory            = "dist"
