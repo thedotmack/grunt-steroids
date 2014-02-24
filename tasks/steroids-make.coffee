@@ -26,19 +26,6 @@ module.exports = (grunt)->
     "steroids-configure"
   ]
 
-  grunt.registerTask "steroids-copy-js-from-app", "Copy JavaScript files from app/ to dist/", ->
-
-    grunt.extendConfig
-      copy:
-        js_from_app:
-          expand: true
-          cwd: "app/"
-          src: ["**/*.js"]
-          dest: "dist/"
-
-    grunt.task.run "copy:js_from_app"
-
-
   grunt.registerTask "steroids-copy-www", "Copy files from www/ to dist/ (except for .scss and .coffee)", ->
 
     grunt.extendConfig
