@@ -64,7 +64,7 @@ module.exports = (grunt)->
 
 
           unless fs.existsSync "#{controllerBasenameWithPath}.js"
-            warningMessage = "#{chalk.red("Warning:")} There is no controller for resource "#{controllerName}".  Add file app/controllers/#{controllerName}.{js|coffee}"
+            warningMessage = "#{chalk.red("Warning:")} There is no controller for resource '#{controllerName}'.  Add file app/controllers/#{controllerName}.{js|coffee}"
             grunt.log.writeln warningMessage
 
           yieldObj =
