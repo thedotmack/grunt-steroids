@@ -1,6 +1,15 @@
-#0.2.1 (TODO)
+#0.2.1 (2014-04-28)
 
-`steroids-configure` task now gives a proper error message if `www/config.xml` is missing.
+SCSS files prefixed with `_` won't be compiled and thus can be used with `@import`, minor error logging fixes, updated dependencies.
+
+Features:
+- SCSS files prefixed with `_` (e.g. `_importThis.scss`) won't be compiled and thus can be used with `@import`.
+
+Changes:
+- Grunt npm dependencies updated to latest versions.
+
+Bugfixes:
+- `steroids-configure` task now gives a proper error message if `www/config.xml` is missing.
 
 #0.2.0 (2014-02-17)
 
