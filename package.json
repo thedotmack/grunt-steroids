@@ -1,7 +1,7 @@
 {
   "name": "grunt-steroids",
   "description": "Grunt tasks for AppGyver Steroids.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "http://www.appgyver.com",
   "author": "AppGyver <contact@appgyver.com>",
   "contributors": [
