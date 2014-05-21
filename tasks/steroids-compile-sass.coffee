@@ -9,19 +9,36 @@ module.exports = (grunt)->
       sass:
         dist:
           files: [
+            # .scss and .sass files
             {
               expand: true
               cwd: 'app/'
-              src: ['**/!(_*).scss', '**/!(_*).sass']
+              src: ['**/!(_*|*.android).scss', '**/!(_*|*.android).sass']
               dest: 'dist/'
               ext: '.css'
             }
             {
               expand: true
               cwd: 'www/'
-              src: ['**/!(_*).scss', '**/!(_*).sass']
+              src: ['**/!(_*|*.android).scss', '**/!(_*|*.android).sass']
               dest: 'dist/'
               ext: '.css'
+            }
+
+            # .android.scss and .android.sass files
+            {
+              expand: true
+              cwd: 'app/'
+              src: ['**/*.android.scss', '**/*.android.sass']
+              dest: 'dist/'
+              ext: '.android.css'
+            }
+            {
+              expand: true
+              cwd: 'www/'
+              src: ['**/*.android.scss', '**/*.android.sass']
+              dest: 'dist/'
+              ext: '.android.css'
             }
           ]
 
