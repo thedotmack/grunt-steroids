@@ -1,5 +1,6 @@
-#CLOUDSCALE CHANGES
-- Support for *.android.scss and *.android.sass
+#0.2.2 (2014-05-22)
+
+Support for *.android.scss and *.android.sass. Thanks to @couhajjou for the pull request!
 
 #0.2.1 (2014-04-28)
 
