@@ -1,3 +1,6 @@
+#CLOUDSCALE CHANGES
+- Support for *.android.scss and *.android.sass
+
 #0.2.1 (2014-04-28)
 
 SCSS files prefixed with `_` won't be compiled and thus can be used with `@import`, minor error logging fixes, updated dependencies.
