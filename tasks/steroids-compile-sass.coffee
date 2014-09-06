@@ -1,52 +1,52 @@
 module.exports = (grunt)->
 
-  grunt.loadNpmTasks 'grunt-contrib-less'
+  grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-extend-config'
 
-  grunt.registerTask 'steroids-compile-less', "Compile LESS files if they exist", ->
+  grunt.registerTask 'steroids-compile-sass', "Compile SASS files if they exist", ->
 
     grunt.extendConfig
-      less:
+      sass:
         dist:
           files: [
-            # .less files
+            # .scss and .sass files
             {
               expand: true
               cwd: 'app/'
-              src: ['**/!(_*|*.android).less']
+              src: ['**/!(_*|*.android).scss', '**/!(_*|*.android).sass']
               dest: 'dist/'
               ext: '.css'
             }
             {
               expand: true
               cwd: 'www/'
-              src: ['**/!(_*|*.android).less']
+              src: ['**/!(_*|*.android).scss', '**/!(_*|*.android).sass']
               dest: 'dist/'
               ext: '.css'
             }
 
-            # .android.less and .android.less files
+            # .android.scss and .android.sass files
             {
               expand: true
               cwd: 'app/'
-              src: ['**/*.android.less']
+              src: ['**/*.android.scss', '**/*.android.sass']
               dest: 'dist/'
               ext: '.android.css'
             }
             {
               expand: true
               cwd: 'www/'
-              src: ['**/*.android.less']
+              src: ['**/*.android.scss', '**/*.android.sass']
               dest: 'dist/'
               ext: '.android.css'
             }
           ]
 
-    lessFiles = grunt.file.expand(["www/**/*.less", "app/**/*.less"])
+    sassFiles = grunt.file.expand(["www/**/*.scss", "www/**/*.sass", "app/**/*.scss", "app/**/*.sass"])
 
-    if lessFiles.length > 0
-      grunt.log.writeln("LESS files found, attempting to compile them to dist/...")
-      grunt.task.run("less:dist")
+    if sassFiles.length > 0
+      grunt.log.writeln("SASS files found, attempting to compile them to dist/...")
+      grunt.task.run("sass:dist")
 
     else
-      grunt.log.writeln("No .less files found in app/ or www/, skipping.")
+      grunt.log.writeln("No .scss or .sass files found in app/ or www/, skipping.")
